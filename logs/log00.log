@@ -1,0 +1,22 @@
+file: C1065_064.cnf, time: 0.0115772s, result: sat, verified: failed
+file: C1065_082.cnf, time: 0.00882113s, result: sat, verified: failed
+file: C140.cnf, time: 0.00769904s, result: sat, verified: verified
+file: C1597_024.cnf, time: 0.0207136s, result: sat, verified: failed
+file: C1597_060.cnf, time: 0.0214331s, result: sat, verified: failed
+file: C1597_081.cnf, time: 0.029617s, result: sat, verified: failed
+{"Instance": "C168_128.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C175_145.cnf", "Time": "--", "Result": "--"}
+file: C181_3151.cnf, time: 0.0333447s, result: sat, verified: failed
+{"Instance": "C200_1806.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C208_120.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C208_3254.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C210_30.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C210_55.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C243_188.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C289_179.cnf", "Time": "--", "Result": "--"}
+file: C459_4675.cnf, time: 0.0844128s, result: sat, verified: verified
+{"Instance": "C53_895.cnf", "Time": "--", "Result": "--"}
+file: U50_1065_038.cnf, time: 0.0104626s, result: sat, verified: failed
+file: U50_1065_045.cnf, time: 0.006945s, result: sat, verified: failed
+file: U50_4450_035.cnf, time: 0.0346647s, result: sat, verified: failed
+file: U75_1597_024.cnf, time: 0.0349645s, result: sat, verified: failed

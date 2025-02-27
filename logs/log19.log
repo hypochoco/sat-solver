@@ -1,0 +1,14 @@
+{"Instance": "C1065_064.cnf", "Time": 14.30, "Result": "UNSAT"}
+{"Instance": "C1065_082.cnf", "Time": 7.58, "Result": "UNSAT"}
+{"Instance": "C140.cnf", "Time": 0.11, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_024.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C1597_060.cnf", "Time": 152.38, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_081.cnf", "Time": 162.12, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C168_128.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C175_145.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C181_3151.cnf", "Time": 21.56, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C200_1806.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C208_120.cnf", "Time": 0.42, "Result": "UNSAT"}
+{"Instance": "C208_3254.cnf", "Time": 91.21, "Result": "UNSAT"}
+{"Instance": "C210_30.cnf", "Time": 176.06, "Result": "UNSAT"}
+{"Instance": "C210_55.cnf", "Time": "--", "Result": "--"}

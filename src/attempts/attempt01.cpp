@@ -1,0 +1,370 @@
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <chrono>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <unordered_set>
+#include <unordered_map>
+
+void print_clause(const std::vector<int> &clause) {
+    for (auto &num : clause) std::cout << num << " ";
+    std::cout << std::endl;
+}
+
+void print_clauses(const std::vector<std::vector<int>> &clauses) {
+    for (auto &clause : clauses) {
+        print_clause(clause);
+    }
+}
+
+std::string collapse_clauses(const std::vector<std::vector<int>> &clauses) {
+    std::unordered_set<int> collapsed;
+    for (const auto &clause : clauses) {
+        for (const auto &num : clause) collapsed.insert(num);
+    }
+    std::string collapes_clauses = "";
+    for (const int &n : collapsed) {collapes_clauses += std::to_string(n) + ' ';}
+    return collapes_clauses;
+}
+
+std::string order_abs(const std::string &assignment) {
+    // order assignment string by abs value
+
+    // early stop
+    if (assignment == "") return "";
+
+    // read in assignment
+    std::string num;
+    std::vector<int> nums;
+    std::stringstream ss(assignment);
+    while (std::getline(ss, num, ' ')) {
+        // std::cout << num << std::endl;
+        nums.push_back(std::stoi(num));
+    }
+
+    // sort by abs
+    std::sort(nums.begin(), nums.end(), [](int a, int b) {return std::abs(a) < std::abs(b);});
+
+    // convert back to string
+    std::string ordered_assignment = "";
+    for (const int &n : nums) {ordered_assignment += std::to_string(n) + ' ';}
+    return ordered_assignment;
+}
+
+struct AbsCompare {
+    bool operator()(int a, int b) const {
+        if (std::abs(a) == std::abs(b)) return a > b;
+        return std::abs(a) < std::abs(b);
+    }
+};
+
+std::string variables_to_string(const std::set<int, AbsCompare> &variables) {
+    std::ostringstream oss;
+    for (auto it = variables.begin(); it != variables.end(); ++it) {
+        if (it != variables.begin()) oss << ' ';  // Add space only after the first element
+        oss << *it;
+    }
+    return oss.str();
+}
+
+bool verify(const std::vector<std::vector<int>> &clauses, const std::string &assignment) {
+    // return true or false if the given assignment is a truth value
+
+    // std::cout << "attempting to verify.." << std::endl;
+
+    // convert assignment into an arr for access
+    std::unordered_set<int> assignment_set;
+    std::string var;
+    std::stringstream ss(assignment);
+    while (std::getline(ss, var, ' ')) {
+        int int_var = std::stoi(var);
+        if (assignment_set.find(-int_var) != assignment_set.end()) return false; // check for duplicates
+        assignment_set.insert(std::stoi(var));
+    }
+
+    // check assignment per clause
+    for (const std::vector<int> &clause : clauses) {
+        if (!std::any_of(clause.begin(), clause.end(), [&assignment_set](int num) {
+            return assignment_set.find(num) != assignment_set.end();
+        })) return false;
+    }
+    return true;
+}
+
+bool remove_unit_literals(std::vector<std::vector<int>> &clauses, std::string &assignment, std::set<int, AbsCompare> &variables) {
+    // remove unit clauses
+
+    // early stop
+    const int init_size = clauses.size();
+    if (init_size == 0) return false;
+
+    // identify unit clauses for removal
+    std::unordered_set<int> remove;
+    for (const std::vector<int> &clause : clauses) { 
+        if (clause.size() == 1 && remove.count(-clause[0]) == 0) { 
+            remove.insert(clause[0]); 
+
+            // add to assignment
+            assignment += std::to_string(clause[0]) + ' ';
+        } 
+    }
+
+    if (remove.size() == 0) return false; // early stop
+
+    for (const int &r : remove) { // remove from variables
+        variables.erase(r); 
+        variables.erase(-r); 
+    }
+
+    // remove
+    clauses.erase(std::remove_if(clauses.begin(), clauses.end(), [&remove](std::vector<int> &clause) {
+        // return t/f if x contains an element from remove
+
+        // find clauses for removal
+        if (std::any_of(clause.begin(), clause.end(), [&remove](const int &num){
+            return remove.find(num) != remove.end();
+        })) return true;
+
+        // find variables for removal
+        clause.erase(std::remove_if(clause.begin(), clause.end(), [&remove](const int &num) {
+            return remove.find(-num) != remove.end();
+        }), clause.end());
+        return false;
+
+    }), clauses.end());
+
+    return init_size != clauses.size();
+}
+
+bool remove_pure_literals(std::vector<std::vector<int>> &clauses, std::string &assignment, std::set<int, AbsCompare> &variables){
+    // remove pure literals
+    const int init_size = clauses.size();
+
+    // early stop
+    if (init_size == 0) return false;
+
+    // identify pure literals
+    std::unordered_map<int, int> freq_map;
+    for (std::vector<int> &clause : clauses) for (int num : clause) freq_map[num]++;
+    std::unordered_set<int> remove;
+    for (auto &[num, freq] : freq_map) if (freq_map[-num] == 0) {
+        remove.insert(num);
+
+        // add to assignment
+        assignment += std::to_string(num) + ' ';
+    }
+    
+    // early stop
+    if (remove.size() == 0) return false;
+
+    // remove from variables
+    for (const int &r : remove) { 
+        variables.erase(r); 
+        variables.erase(-r); 
+    }
+
+    // remove pure literals clauses
+    clauses.erase(std::remove_if(clauses.begin(), clauses.end(), [&remove](std::vector<int> &x) {
+        // return t/f if x contains an element from remove
+
+        return std::any_of(x.begin(), x.end(), [&remove](const int num) {
+            return remove.find(num) != remove.end() || remove.find(-num) != remove.end();
+        });
+    }), clauses.end());
+
+    return init_size != clauses.size();
+}
+
+int select_branch(std::set<int, AbsCompare> &variables) {
+    // returns a num to branch on
+
+    if (variables.size() > 0) {
+        int num = *variables.begin();
+        variables.erase(num); variables.erase(-num);
+        return num;
+    } else {
+        return 0;
+    }
+}
+
+std::vector<std::vector<int>> branch(std::vector<std::vector<int>> clauses, const int &num) {
+    // return modified branch based on assignment
+
+    // branch on num
+    clauses.erase(std::remove_if(clauses.begin(), clauses.end(), [&num](std::vector<int> &clause) {
+        int i = 0, j = -1;
+        for (int &var : clause) {
+            if (var == num) {return true;}
+            if (var == -num) j = i;
+            i++;
+        }
+        if (j != -1 && j < clause.size()) clause.erase(clause.begin()+j);
+        return false;
+    }), clauses.end());
+
+    return clauses;
+}
+
+bool complete(const std::vector<std::vector<int>> &clauses) {
+    // returns if the sat solver is completed or not
+
+    // completions: 
+        // 0 or 1 clauses
+        // unsat -> any clause is empty
+
+    if (clauses.size() <= 1 || std::any_of(clauses.begin(), clauses.end(), [](const std::vector<int> &clause) {
+        return clause.size() == 0;
+    })) return true;
+    return false;
+}
+
+std::string completed_output(const std::vector<std::vector<int>> &clauses) {
+    // assuming completed, return variable assignemnts
+
+    std::string assignment = "";
+    for (const std::vector<int> &clause : clauses) {
+        if (clause.size() == 0) return "none";
+        for (const int &num : clause) {
+            assignment += std::to_string(num) + ' ';
+        }
+    }
+    return assignment;
+}
+
+std::string dfs(std::vector<std::vector<int>> clauses, std::set<int, AbsCompare> variables, std::unordered_set<std::string> &visited) {
+    // dfs
+
+    // optimization notes
+        // minimize the number of completion checks
+
+    // check visited
+    // if (visited.find(variables_to_string(variables)) != visited.end()) return "none";
+
+    // check complete
+    if (complete(clauses)) return completed_output(clauses);
+
+    // inference
+    std::string assignment = "";
+    while (remove_unit_literals(clauses, assignment, variables) && remove_pure_literals(clauses, assignment, variables));
+
+    // check complete
+    if (complete(clauses)) {
+        std::string completed_output_string = completed_output(clauses);
+        if (completed_output_string == "none") return completed_output_string;
+        else return assignment + completed_output(clauses);
+    }
+
+    // dfs
+    int num = select_branch(variables);
+    std::string output;
+    if ((output = dfs(branch(clauses, num), variables, visited)) != "none") return assignment + std::to_string(num) + ' ' + output;
+    if ((output = dfs(branch(clauses, -num), variables, visited)) != "none") return assignment + std::to_string(-num) + ' ' + output;
+
+    // store visited
+    // visited.insert(variables_to_string(variables));
+
+    // this isn't right though...
+    // it might be a decent way of not visiting the thing though... 
+    // but not great... 
+    
+    return "none";
+}
+
+int main(int argc, char* argv[]) {
+
+    // plan
+        // parse input into a workable format
+        // algorithm
+            // inference (step 1, step 2): getting rid of unnecessary variables
+                // unit literals
+                // pure literals
+            // branching (step 3): tree search
+
+    // notes
+        // memoization -> comparable structure
+        // data structure
+            // full, ordered string (elements in clause and whatever else is ordered)
+
+    // optimization notes
+        // C1597_024 over time -> sat
+        // C200_1806 over time -> unsat
+        // C289_179 over time -> unknown (file large)
+        
+        // use stats (fixed size arr?)
+        // freq of variables
+        // location store for variables
+        // memoization (convert to pattern matching, problem minimization, or something of the sort... )
+
+        // backjumping
+
+    // implementation
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // data structures
+    int stats[2]; // num variables, num clauses
+    std::vector<std::vector<int>> clauses; // 2d vector
+    std::set<int, AbsCompare> variables; // all vars in expression
+    std::unordered_set<std::string> visited;
+
+    // parse input
+
+    // input file error handling
+    if (argc != 2) { std::cerr << "Usage: " << argv[0] << " <input.cnf>" << std::endl; return 1; }
+    std::ifstream cnfFile(argv[1]);
+    if (!cnfFile) { std::cerr << "Error: Cannot open file " << argv[1] << std::endl; return 1; }
+
+    // iterate over input cnf file
+    std::string line;
+    while (std::getline(cnfFile, line)) {
+        if (line[0] == 'c') continue; // ignore comments
+        if (line[0] == 'p') { // initial line
+            int count = 0;
+            std::string value;
+            std::stringstream ss(line);
+            while (std::getline(ss, value, ' ')) { // iterate over line
+                if (value == "p") continue;
+                if (value == "cnf") continue;
+                stats[count] = std::stoi(value);
+                count++;
+            }
+        } else {
+            std::unordered_set<int> clause_set;
+            std::string value;
+            std::stringstream ss(line);
+            while (std::getline(ss, value, ' ')) { // iterate over line, store into data structure
+                if (value == "0") continue;
+                clause_set.insert(std::stoi(value));
+                variables.insert(std::stoi(value));
+            }
+            clauses.push_back(std::vector<int>(clause_set.begin(), clause_set.end()));
+        }
+    }
+
+    // implementation here
+    std::string result = dfs(clauses, variables, visited);
+
+    // end timing
+    auto end = std::chrono::high_resolution_clock::now();
+    const std::chrono::duration<double> time = end - start;
+
+    // output message
+    size_t pos = std::string(argv[1]).find_last_of("/\\");
+    std::string filename = (pos != std::string::npos) ? std::string(argv[1]).substr(pos + 1) : "";
+    std::cout << "file: " << filename;
+    std::cout << ", time: " << time.count() << " seconds, ";
+    std::string print_result = (result != "none")? order_abs(result) : "unsat";
+    std::cout << "assignment: " << print_result;
+    if (result != "none") {
+        std::string verification = verify(clauses, result)? "verified sat" : "error--found assignment does not satisfy expression";
+        std::cout << ", verification: " << verification << "\n";
+    } else {
+        std::cout << std::endl;
+    }
+    
+    // end of implementation
+
+    return 0;
+}

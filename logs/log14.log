@@ -1,0 +1,7 @@
+{"Instance": "C1065_064.cnf", "Time": 2.16, "Result": "UNSAT"}
+{"Instance": "C1065_082.cnf", "Time": 2.07, "Result": "UNSAT"}
+{"Instance": "C140.cnf", "Time": 0.01, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_024.cnf", "Time": 128.80, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_060.cnf", "Time": 1.94, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_081.cnf", "Time": 215.67, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C168_128.cnf", "Time": 0.08, "Result": "UNSAT"}
