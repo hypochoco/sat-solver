@@ -29,7 +29,13 @@ int moms::next(const bitset &assignment) const{
     }
 
     // check termination
-    if (unsat_clauses.size() == 0) return -1;
+    if (unsat_clauses.size() == 0) {
+        if (assignment.num_variables() < N) { // satisfied, but not all vars assigned
+            for (int i=1; i<N+1; i++) {
+                if (!assignment.test_or(i)) return i;
+            }
+        } else return -1;
+    }
 
     // find max number of occurrences
     std::unordered_map<int,int> freq_map;

@@ -34,7 +34,7 @@ inline int luby(int k) {
     return luby(k - (power - 1));
 }
 
-inline std::tuple<int, watch_list*, std::vector<bitset>*> preprocess(const int &argc, char* argv[]) {
+inline std::tuple<int, watch_list*, std::vector<bitset>*, std::unordered_map<int, int>> preprocess(const int &argc, char* argv[]) {
     // number of variables, watch_list, clauses
 
     // parse input
@@ -86,7 +86,6 @@ inline std::tuple<int, watch_list*, std::vector<bitset>*> preprocess(const int &
             if (value == "0") continue;
             int int_value = std::stoi(value);
             max_abs_variable = std::max(max_abs_variable, abs(int_value)); // for logging purposes
-
             if (reduction_map[abs(int_value)] == 0) { // if default value, new item
                 reduction_count++;
                 reduction_map[abs(int_value)] = reduction_count;
@@ -108,5 +107,11 @@ inline std::tuple<int, watch_list*, std::vector<bitset>*> preprocess(const int &
         }
     }
 
-    return {N, wc, clauses};
+    // reverse map for output purposes
+    std::unordered_map<int, int> rr_map;
+    for (const auto& [key, value] : reduction_map) {
+        rr_map[value] = key;
+    }
+
+    return {N, wc, clauses, rr_map};
 }

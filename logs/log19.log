@@ -12,3 +12,11 @@
 {"Instance": "C208_3254.cnf", "Time": 91.21, "Result": "UNSAT"}
 {"Instance": "C210_30.cnf", "Time": 176.06, "Result": "UNSAT"}
 {"Instance": "C210_55.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C243_188.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C289_179.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C459_4675.cnf", "Time": 0.13, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C53_895.cnf", "Time": "--", "Result": "--"}
+{"Instance": "U50_1065_038.cnf", "Time": 6.50, "Result": "UNSAT"}
+{"Instance": "U50_1065_045.cnf", "Time": 8.35, "Result": "UNSAT"}
+{"Instance": "U50_4450_035.cnf", "Time": 296.55, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "U75_1597_024.cnf", "Time": 181.88, "Result": "SAT", "Verification": "Passed"}

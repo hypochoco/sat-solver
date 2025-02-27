@@ -1,0 +1,22 @@
+{"Instance": "C1065_064.cnf", "Time": 8.61, "Result": "UNSAT"}
+{"Instance": "C1065_082.cnf", "Time": 6.59, "Result": "UNSAT"}
+{"Instance": "C140.cnf", "Time": 0.11, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_024.cnf", "Time": 25.82, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_060.cnf", "Time": 65.95, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C1597_081.cnf", "Time": 131.50, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C168_128.cnf", "Time": 29.25, "Result": "UNSAT"}
+{"Instance": "C175_145.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C181_3151.cnf", "Time": 5.56, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C200_1806.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C208_120.cnf", "Time": 0.42, "Result": "UNSAT"}
+{"Instance": "C208_3254.cnf", "Time": 52.12, "Result": "UNSAT"}
+{"Instance": "C210_30.cnf", "Time": 217.01, "Result": "UNSAT"}
+{"Instance": "C210_55.cnf", "Time": 287.89, "Result": "UNSAT"}
+{"Instance": "C243_188.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C289_179.cnf", "Time": "--", "Result": "--"}
+{"Instance": "C459_4675.cnf", "Time": 0.11, "Result": "SAT", "Verification": "Passed"}
+{"Instance": "C53_895.cnf", "Time": "--", "Result": "--"}
+{"Instance": "U50_1065_038.cnf", "Time": 8.72, "Result": "UNSAT"}
+{"Instance": "U50_1065_045.cnf", "Time": 10.75, "Result": "UNSAT"}
+{"Instance": "U50_4450_035.cnf", "Time": "--", "Result": "--"}
+{"Instance": "U75_1597_024.cnf", "Time": 239.40, "Result": "SAT", "Verification": "Passed"}

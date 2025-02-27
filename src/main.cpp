@@ -23,19 +23,26 @@
 // int WAIT_TIME = 100;
 // int NUM_WORKERS = 12;
 
-// log 19, all moms
-int BASE = 1e5;
-int WAIT_TIME = 100;
-int NUM_WORKERS = 12;
-
-// // test
+// // log 19, all moms
 // int BASE = 1e5;
 // int WAIT_TIME = 100;
-// int NUM_WORKERS = 1;
+// int NUM_WORKERS = 12;
 
-// note
-    // what about a fixed restart size
-    // start working on the report
+// // log 20, half vsids, half moms
+// int BASE = 1e5;
+// int WAIT_TIME = 100;
+// int NUM_WORKERS = 12;
+
+// // log 21, 10 vsids 2 moms
+// int BASE = 1e5;
+// int WAIT_TIME = 100;
+// int NUM_WORKERS = 12;
+
+// log 21, 10 vsids 2 moms
+int BASE = 1e3;
+int WAIT_TIME = 50;
+int NUM_WORKERS = 12;
+
 
 struct solver {
 
@@ -212,14 +219,18 @@ int main(int argc, char* argv[]) {
     int num_solvers = NUM_WORKERS;
 
     // preprocess data
-    std::tuple<int, watch_list*, std::vector<bitset>*> pp = preprocess(argc, argv);
+    std::tuple<int, watch_list*, std::vector<bitset>*, std::unordered_map<int, int>> pp = preprocess(argc, argv);
     int N = std::get<0>(pp);
     watch_list *wc = std::get<1>(pp);
     std::vector<bitset> *clauses = std::get<2>(pp);
+    std::unordered_map<int, int> rr_map = std::get<3>(pp);
 
     // build solvers
     std::vector<solver*> solvers;
-    for (int i=0; i<num_solvers; i++) {
+    for (int i=0; i<10; i++) {
+        solvers.emplace_back(new solver(N, wc, *clauses, "vsids"));
+    }
+    for (int i=0; i<2; i++) {
         solvers.emplace_back(new solver(N, wc, *clauses, "moms"));
     }
 
@@ -261,9 +272,22 @@ int main(int argc, char* argv[]) {
     if (result == "sat") {
         std::string verification = verify(assignment, *clauses)? "Passed" : "Failed";
         std::cout << ", \"Verification\": \"" << verification << "\"";
+
+        // // reverse reduction map
+        // bitset r_assignment = assignment.emptied();
+        // for (const int &variable : assignment.to_variables()) {
+        //     int r_variable = rr_map[abs(variable)];
+        //     r_assignment.set(bit(variable>0? r_variable : -r_variable));
+        // }
+        // std::stringstream oss;
+        // for (const int &variable : r_assignment.to_variables()) {
+        //     std::string value = variable > 0? " true " : " false ";
+        //     oss << abs(variable) << value;
+        // }
+        // std::cout << ", \"Solution\": \"" << oss.str() << "\"";
     }
     std::cout << "}" << std::endl;
-
+    
     // clean up
     for (solver *s : solvers) delete s;
     delete stack;
