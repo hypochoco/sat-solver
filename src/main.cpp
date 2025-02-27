@@ -6,6 +6,7 @@
 #include <random>
 #include <atomic>
 #include <mutex>
+#include <iomanip>
 
 #include "decision.h"
 #include "data_structures.h"
