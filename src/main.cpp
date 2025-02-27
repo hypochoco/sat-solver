@@ -5,6 +5,7 @@
 #include <queue>
 #include <random>
 #include <atomic>
+#include <mutex>
 
 #include "decision.h"
 #include "data_structures.h"
