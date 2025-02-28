@@ -3,6 +3,7 @@
 
 #include <unordered_set>
 #include <random>
+#include <stdexcept>
 
 
 struct bit {
