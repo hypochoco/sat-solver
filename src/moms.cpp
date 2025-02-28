@@ -2,6 +2,7 @@
 #include <set>
 #include <unordered_map>
 #include <iostream>
+#include <climits>
 
 #include "decision.h"
 #include "data_structures.h"
