@@ -1,5 +1,5 @@
 
-### true values
+### True Results
 
 | file         | result  |
 | ------------ | ------- |
@@ -15,7 +15,7 @@
 | C200_1806    | unsat   |
 | C208_120     | unsat   |
 | C208_3254    | unsat   |
-| C210_30      | unsat    |
+| C210_30      | unsat   |
 | C210_55      | unsat   |
 | C243_188     | unknown |
 | C289_179     | unknown | unsat, probably
@@ -25,8 +25,3 @@
 | U50_1065_045 | unsat   |
 | U50_4450_035 | sat     |
 | U75_1597_024 | sat     |
-
-
-### submission command
-
-`zip -r project.zip *`
