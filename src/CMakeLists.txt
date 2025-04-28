@@ -7,4 +7,4 @@ set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
-add_executable(project1 main.cpp data_structures.cpp watch_list.cpp utilities.h decision.h vsids.cpp moms.cpp)
+add_executable(project1 main.cpp structures/sat_instance.cpp dpll/dpll.cpp)

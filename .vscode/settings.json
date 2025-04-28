@@ -58,6 +58,7 @@
         "queue": "cpp",
         "stack": "cpp",
         "iterator": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "charconv": "cpp"
     }
 }
